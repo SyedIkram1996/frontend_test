@@ -14,7 +14,23 @@ import {
 import { useEffect, useMemo, useRef, useState } from "react";
 import Dropdown, { DropdownOption } from "./Dropdown";
 
-const Calendar = () => {
+interface Props {
+  className?: string;
+  btnClassName?: string;
+  onSelect: (selectedDate: Date | null) => void;
+  date?: Date | null;
+  filter?: boolean;
+  onClickClose?: () => void;
+}
+
+const Calendar = ({
+  className,
+  btnClassName,
+  onSelect,
+  date,
+  filter,
+  onClickClose,
+}: Props) => {
   const years = useMemo(() => {
     const startYear = 1990;
     const endYear = 2099;
@@ -28,9 +44,16 @@ const Calendar = () => {
   }, []);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(date || null);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const calendarRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (date) {
+      setSelectedDate(date);
+      setCurrentMonth(date);
+    }
+  }, [date]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -67,47 +90,55 @@ const Calendar = () => {
   // Previous month navigation
   const handlePreviousMonth = () => {
     setCurrentMonth(subMonths(currentMonth, 1));
+    onSelect(setYear(subMonths(currentMonth, 1), currentMonth.getFullYear()));
   };
 
   // Next month navigation
   const handleNextMonth = () => {
     setCurrentMonth(addMonths(currentMonth, 1));
+    onSelect(setYear(addMonths(currentMonth, 1), currentMonth.getFullYear()));
   };
 
   // Date selection handler
   const handleDateSelect = (date: Date) => {
     setSelectedDate(date);
+    onSelect(date);
     setIsOpen(false);
   };
 
   const handleSelect = (selected: DropdownOption | null) => {
-    console.log(selectedDate);
     if (selectedDate) {
       setSelectedDate(setYear(selectedDate, Number(selected?.label)));
+      onSelect(setYear(selectedDate, Number(selected?.label)));
       return;
     }
+
     setCurrentMonth(setYear(currentMonth, Number(selected?.label)));
+    onSelect(setYear(currentMonth, Number(selected?.label)));
   };
 
   return (
-    <div className="relative z-20" ref={calendarRef}>
+    <div className={`relative z-20 ${className}`} ref={calendarRef}>
       <button
+        type="button"
         onClick={() => {
           if (selectedDate) {
             setCurrentMonth(selectedDate);
           }
           setIsOpen(!isOpen);
         }}
-        className={`px-4 py-0.5 cursor-pointer bg-white ${
+        className={`w-full text-start px-4 py-0.5 cursor-pointer bg-white ${
           selectedDate ? "text-gray-900" : "text-gray-500"
-        } border rounded-md shadow-sm hover:bg-gray-50 transition-colors`}
+        } border rounded-md  hover:bg-gray-50 transition-colors ${
+          btnClassName ? btnClassName : "shadow-sm"
+        }`}
       >
         {selectedDate ? format(selectedDate, "MMM dd, yyyy") : "Select Date"}
 
-        {!selectedDate ? (
+        {!selectedDate || !filter ? (
           <span className={"float-right px-2 mt-1"}>
             <svg
-              className="text-gray-500"
+              className={`${filter ? "text-gray-500" : "#000000"}`}
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               width="16"
@@ -157,6 +188,9 @@ const Calendar = () => {
             onClick={(e) => {
               e.stopPropagation();
               setSelectedDate(null);
+              if (onClickClose) {
+                onClickClose();
+              }
             }}
             className="float-right rounded-full px-2 hover:bg-gray-300 font-medium"
           >
@@ -166,10 +200,13 @@ const Calendar = () => {
       </button>
 
       {isOpen && (
-        <div className="absolute sm:right-0 mt-2 p-4 bg-white border rounded-lg shadow-lg w-64">
+        <div
+          className={`absolute sm:right-0 mt-2 p-4 bg-white border rounded-lg shadow-lg w-64 ${className}`}
+        >
           {/* Calendar Header */}
           <div className="flex justify-between items-center mb-4">
             <button
+              type="button"
               onClick={handlePreviousMonth}
               className="p-1 hover:bg-gray-100 rounded"
             >
@@ -187,6 +224,7 @@ const Calendar = () => {
             </span>
 
             <button
+              type="button"
               onClick={handleNextMonth}
               className="p-1 hover:bg-gray-100 rounded"
             >
@@ -213,6 +251,7 @@ const Calendar = () => {
 
               return (
                 <button
+                  type="button"
                   key={date.toISOString()}
                   onClick={() => handleDateSelect(date)}
                   className={`

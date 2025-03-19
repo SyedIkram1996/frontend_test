@@ -6,6 +6,7 @@ interface Props {
   itemsPerPage: number;
   onPageChange: (page: number) => void;
   className?: string;
+  totalPages: number;
 }
 
 const CustomPagination = ({
@@ -14,8 +15,8 @@ const CustomPagination = ({
   itemsPerPage,
   onPageChange,
   className = "",
+  totalPages,
 }: Props) => {
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
   const isFirstPage = currentPage === 1;
   const isLastPage = currentPage === totalPages;
 

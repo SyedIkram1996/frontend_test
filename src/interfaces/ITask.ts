@@ -1,4 +1,4 @@
-export type Status = "Completed" | "In Progress" | "Pending" | "On Hold";
+export type Status = "Completed" | "In Progress" | "Pending" | "On Hold" | "";
 
 export interface ITask {
   id: number;
@@ -6,4 +6,6 @@ export interface ITask {
   description: string;
   status: Status;
   dueDate: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

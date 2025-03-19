@@ -1,20 +1,28 @@
 "use client";
 
 import InputField from "@/components/common/Input/InputField";
-import React, { useState } from "react";
+import useTextFieldDebounce from "@/hooks/useTextFieldDebounce";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const Search = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const searchParams = useSearchParams();
+  const { replace } = useRouter();
+  const pathname = usePathname();
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-  };
+  const { handleTextFieldChange } = useTextFieldDebounce({
+    searchParams,
+    replace,
+    pathname,
+  });
 
   return (
     <InputField
+      name="search"
       placeholder="Search for something..."
-      value={searchTerm}
-      onChange={handleSearchChange}
+      defaultValue={searchParams.get("search") || ""}
+      onChange={(e) => {
+        handleTextFieldChange(e);
+      }}
       className="w-96" // Custom width
       icon={
         <svg

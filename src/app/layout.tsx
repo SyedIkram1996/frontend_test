@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ReactNode } from "react";
 import "./globals.css";
+import Providers from "./providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,12 +29,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-100 max-w-[1400px]`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-100  w-full flex justify-center`}
       >
-        {modal}
-        <div className="font-[family-name:var(--font-geist-sans)] p-4 sm:p-8 sm:pb-4">
-          {children}
-        </div>
+        <Providers>
+          {modal}
+
+          <div className="max-w-[1400px] w-full font-[family-name:var(--font-geist-sans)] p-4 sm:p-8 sm:pb-4">
+            {children}
+          </div>
+        </Providers>
       </body>
     </html>
   );

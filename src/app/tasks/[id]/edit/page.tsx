@@ -1,9 +1,22 @@
-export default function EditTask() {
-  return (
-    <div className="items-center min-h-screen p-8 pb-20 gap-16  font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px]"></main>
+import CreateTask from "@/components/ui/CreateTask/CreateTask";
+import { TASK } from "@/constants/api.routes";
+import { ITask } from "@/interfaces/ITask";
+import { redirect } from "next/navigation";
 
-      <footer></footer>
-    </div>
-  );
+interface Props {
+  params: {
+    id: string;
+  };
+}
+
+export default async function EditTask({ params }: Props) {
+  const { id } = await params;
+  const data = await fetch(TASK(Number(id)));
+  const task: { data: ITask } = await data.json();
+
+  if (!task || !task.data) {
+    return redirect("/");
+  }
+
+  return <CreateTask task={task.data} />;
 }

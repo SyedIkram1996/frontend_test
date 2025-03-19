@@ -1,91 +1,25 @@
 import MobileDrawer from "@/components/common/MobileDrawer/MobileDrawer";
-import { ITask } from "@/interfaces/ITask";
 import Link from "next/link";
 import CustomButton from "../../../common/Button/CustomButton";
 import Filter from "../Filter/Filter";
 import Search from "../Search/Search";
-import TaskTable from "./TaskTable";
+import TasksContainer from "./TasksContainer";
+interface Props {
+  searchParams: {
+    search?: string;
+    status?: string;
+    dueDate?: string;
+    page?: string;
+  };
+}
 
-const Tasks = () => {
-  const tasks: ITask[] = [
-    {
-      id: 1,
-      title: "Design Homepage",
-      description: "Create responsive layout for main landing page",
-      status: "Completed",
-      dueDate: new Date(),
-    },
-    {
-      id: 2,
-      title: "Design Homepage",
-      description: "Create responsive layout for main landing page",
-      status: "In Progress",
-      dueDate: new Date(),
-    },
-    {
-      id: 3,
-      title: "Design Homepage",
-      description: "Create responsive layout for main landing page",
-      status: "Pending",
-      dueDate: new Date(),
-    },
-    {
-      id: 4,
-      title: "Design Homepage",
-      description: "Create responsive layout for main landing page",
-      status: "On Hold",
-      dueDate: new Date(),
-    },
-    {
-      id: 5,
-      title: "Design Homepage",
-      description: "Create responsive layout for main landing page",
-      status: "Completed",
-      dueDate: new Date(),
-    },
-    {
-      id: 6,
-      title: "Design Homepage",
-      description: "Create responsive layout for main landing page",
-      status: "In Progress",
-      dueDate: new Date(),
-    },
-    {
-      id: 7,
-      title: "Design Homepage",
-      description: "Create responsive layout for main landing page",
-      status: "Pending",
-      dueDate: new Date(),
-    },
-    {
-      id: 8,
-      title: "Design Homepage",
-      description: "Create responsive layout for main landing page",
-      status: "On Hold",
-      dueDate: new Date(),
-    },
-    {
-      id: 9,
-      title: "Design Homepage",
-      description: "Create responsive layout for main landing page",
-      status: "On Hold",
-      dueDate: new Date(),
-    },
-    {
-      id: 10,
-      title: "Design Homepage",
-      description: "Create responsive layout for main landing page",
-      status: "On Hold",
-      dueDate: new Date(),
-    },
-  ];
-
+const Tasks = ({ searchParams }: Props) => {
   return (
     <main className="flex flex-col gap-[12px]">
       <div className="flex justify-between items-center bg-white rounded-lg py-2 px-4 shadow-sm">
         <Search />
 
-        <Link href={"/tasks/create"}>
+        <Link href={"/task/create"}>
           <>
             <CustomButton
               icon={
@@ -136,7 +70,7 @@ const Tasks = () => {
 
       <MobileDrawer />
 
-      <TaskTable tasks={tasks} />
+      <TasksContainer searchParams={searchParams} />
     </main>
   );
 };

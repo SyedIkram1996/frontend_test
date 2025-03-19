@@ -13,6 +13,8 @@ interface DropdownProps {
   placeholder?: string;
   className?: string;
   btnClassName?: string;
+  option?: DropdownOption;
+  onClickClose?: () => void;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
@@ -21,10 +23,12 @@ const Dropdown: React.FC<DropdownProps> = ({
   placeholder = "Select an option",
   className = "",
   btnClassName = "",
+  option,
+  onClickClose,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<DropdownOption | null>(
-    null
+    option || null
   );
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -60,13 +64,13 @@ const Dropdown: React.FC<DropdownProps> = ({
   }, []);
 
   return (
-    <div className={` z-20 relative ${className}`} ref={dropdownRef}>
+    <div className={`z-21 relative ${className}`} ref={dropdownRef}>
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full text-left bg-white border rounded-md shadow-sm hover:bg-gray-50 focus:outline-none cursor-pointer ${
+        className={`w-full text-left bg-white border rounded-md hover:bg-gray-50 focus:outline-none cursor-pointer ${
           selectedOption && !btnClassName ? "text-gray-900" : "text-gray-500"
-        } ${btnClassName ? btnClassName : "px-4 py-0.5"}`}
+        } ${btnClassName ? btnClassName : "px-4 py-0.5 shadow-sm"}`}
         aria-haspopup="true"
         aria-expanded={isOpen}
       >
@@ -80,6 +84,9 @@ const Dropdown: React.FC<DropdownProps> = ({
             onClick={(e) => {
               e.stopPropagation();
               setSelectedOption(null);
+              if (onClickClose) {
+                onClickClose();
+              }
             }}
             className=" font-medium float-right rounded-full px-2 hover:bg-gray-300"
           >

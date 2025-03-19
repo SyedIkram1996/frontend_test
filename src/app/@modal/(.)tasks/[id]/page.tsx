@@ -2,7 +2,14 @@ import TaskDetails from "@/components/ui/TaskDetails/TaskDetails";
 import Link from "next/link";
 import { Suspense } from "react";
 
-const ModalPage = () => {
+interface Props {
+  params: {
+    id: string;
+  };
+}
+export default async function ModalPage({ params }: Props) {
+  const { id } = await params;
+
   return (
     <>
       <Link
@@ -24,11 +31,9 @@ const ModalPage = () => {
         </div>
 
         <Suspense fallback={<p>Loading...</p>}>
-          <TaskDetails />
+          <TaskDetails id={id} />
         </Suspense>
       </div>
     </>
   );
-};
-
-export default ModalPage;
+}
