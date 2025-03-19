@@ -1,5 +1,6 @@
 "use client";
 
+import { revalidateTasks } from "@/app/actions";
 import Breadcrumb from "@/components/common/Breadcrumb/Breadcrumb";
 import CustomButton from "@/components/common/Button/CustomButton";
 import Calendar from "@/components/common/Input/Calender";
@@ -51,8 +52,8 @@ const CreateTask = ({ task }: Props) => {
 
       return await createTask(formikValues);
     },
-    onSuccess: (data) => {
-      router.refresh();
+    onSuccess: async (data) => {
+      await revalidateTasks();
       router.push("/");
     },
     onError: (error) => {

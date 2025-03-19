@@ -14,7 +14,9 @@ interface Props {
   };
 }
 export default async function TaskTable({ searchParams }: Props) {
-  const data = await fetch(getTasksUrl({ searchParams }));
+  const data = await fetch(getTasksUrl({ searchParams }), {
+    next: { tags: ["tasks"] },
+  });
   const tasks: { data: ITask[]; meta: any } = await data.json();
 
   return (

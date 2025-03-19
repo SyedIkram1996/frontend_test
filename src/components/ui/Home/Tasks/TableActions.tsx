@@ -1,5 +1,6 @@
 "use client";
 
+import { revalidateTasks } from "@/app/actions";
 import { deleteTask } from "@/services/task.services";
 import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
@@ -20,7 +21,7 @@ const TableActions = ({ id }: Props) => {
       return await deleteTask(id);
     },
     onSuccess: (data) => {
-      router.refresh();
+      revalidateTasks();
     },
     onError: (error) => {
       setIsLoading(false);
