@@ -50,7 +50,9 @@ export default async function TaskTable({ searchParams }: Props) {
         ))
       ) : (
         <div className="flex flex-col  justify-center items-center  h-[calc(100dvh-300px)] ">
-          {searchParams.search || searchParams.status ? (
+          {searchParams.search ||
+          searchParams.status ||
+          searchParams.dueDate ? (
             <p>Not Found</p>
           ) : (
             <>

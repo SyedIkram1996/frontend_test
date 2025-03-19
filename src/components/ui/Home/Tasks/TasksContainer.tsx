@@ -33,7 +33,13 @@ const TasksContainer = ({ searchParams }: Props) => {
             </div>
           </div>
 
-          <Suspense fallback={<p className="p-5">loading...</p>}>
+          <Suspense
+            fallback={
+              <p className="p-5 flex flex-col  justify-center items-center  h-[calc(100dvh-300px)]">
+                loading...
+              </p>
+            }
+          >
             <TaskTable searchParams={searchParams} />
           </Suspense>
         </div>

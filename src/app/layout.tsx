@@ -32,9 +32,8 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-100  w-full flex justify-center`}
       >
         <Providers>
-          {modal}
-
           <div className="max-w-[1400px] w-full font-[family-name:var(--font-geist-sans)] p-4 sm:p-8 sm:pb-4">
+            {modal}
             {children}
           </div>
         </Providers>
